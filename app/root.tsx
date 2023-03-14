@@ -1,4 +1,5 @@
-import type { MetaFunction } from "@remix-run/node";
+import type { LinksFunction, LoaderArgs, MetaFunction } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -9,15 +10,29 @@ import {
 } from "@remix-run/react";
 import { Analytics } from "@vercel/analytics/react";
 
+import stylesheet from "~/tailwind.css";
+import { getUser } from "./session.server";
+
+export const links: LinksFunction = () => [
+  { rel: "stylesheet", href: stylesheet },
+  { rel: "icon", href: "/favicon.ico" },
+];
+
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
-  title: "New Remix App",
+  title: "ТвойКомпас",
   viewport: "width=device-width,initial-scale=1",
 });
 
+export async function loader({ request }: LoaderArgs) {
+  return json({
+    user: await getUser(request),
+  });
+}
+
 export default function App() {
   return (
-    <html lang="en">
+    <html lang='en'>
       <head>
         <Meta />
         <Links />

@@ -1,0 +1,123 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id String @id @default(cuid())
+
+  name  String
+  email String @unique
+
+  staff         Boolean      @default(false)
+  institution   Institution? @relation(name: "intstStaffs", fields: [institutionId], references: [id])
+  institutionId String?
+
+  avatarUrl String?
+
+  password Password?
+  messages Message[]
+
+  favInstitutions Institution[]
+  favDirections   Direction[]
+
+  trackedEvents Event[]
+}
+
+model Password {
+  hash String
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId String @unique
+}
+
+model Institution {
+  id String @id @default(cuid())
+
+  name String
+  city String
+
+  directions Direction[]
+  events     Event[]
+
+  inFavs User[]
+  staffs User[] @relation(name: "intstStaffs")
+}
+
+model Tag {
+  id String @id @default(cuid())
+
+  name String
+
+  directions Direction[]
+  events     Event[]
+}
+
+model Direction {
+  id String @id @default(cuid())
+
+  name        String
+  description String
+
+  institutions Institution[]
+  tags         Tag[]
+  messages     Message[]
+
+  inFavs User[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Event {
+  id String @id @default(cuid())
+
+  name        String
+  description String
+  date        DateTime
+  public      Boolean  @default(false)
+
+  institution   Institution? @relation(fields: [institutionId], references: [id])
+  institutionId String?
+
+  tags     Tag[]
+  messages Message[]
+
+  inTracks User[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Message {
+  id String @id @default(cuid())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId String
+
+  direction   Direction? @relation(fields: [directionId], references: [id])
+  directionId String?
+  event       Event?     @relation(fields: [eventId], references: [id])
+  eventId     String?
+
+  media Media[]
+
+  createdAt DateTime @default(now())
+}
+
+model Media {
+  id String @id @default(cuid())
+
+  url String
+  key String
+
+  comment   Message @relation(fields: [commentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  commentId String
+}
