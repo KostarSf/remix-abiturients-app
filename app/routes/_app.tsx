@@ -2,9 +2,9 @@ import { Link, NavLink, Outlet } from "@remix-run/react";
 
 export default function AppRoute() {
   return (
-    <div className='flex min-h-screen items-stretch'>
-      <div className='border-l-8 border-myorange bg-gray-100 px-10'>
-        <div className='flex h-full flex-col items-stretch pt-8'>
+    <div className='flex min-h-screen items-stretch relative'>
+      <div className='border-l-8 border-myorange bg-gray-100 flex-shrink-0 w-72'>
+        <div className='px-10 fixed top-0 left-0 flex h-full flex-col items-stretch pt-8 w-72'>
           <Link to={`/`}>
             <img
               className='h-[38px] w-[190px]'
@@ -24,7 +24,7 @@ export default function AppRoute() {
           </div>
         </div>
       </div>
-      <div className='m-4 flex-grow'>
+      <div className='flex-grow'>
         <Outlet />
       </div>
     </div>

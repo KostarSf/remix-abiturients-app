@@ -16,6 +16,9 @@ export function getTagsListItems() {
       id: true,
       name: true,
     },
+    orderBy: {
+      name: "asc",
+    },
   });
 }
 

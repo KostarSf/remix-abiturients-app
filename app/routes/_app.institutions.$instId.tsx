@@ -27,6 +27,10 @@ export async function action({ request, params }: ActionArgs) {
 
     return redirect("/institutions");
   } else if (intent === "disconnect") {
+    if (!user.staff) {
+      return json({}, { status: 403 });
+    }
+
     const directionId = formData.get("directionId");
     if (typeof directionId !== "string" || directionId.trim() === "")
       return json({});
@@ -68,17 +72,19 @@ export default function InstitutionDetailsPage() {
             >
               {dir.name}
             </Link>
-            <Form method='post'>
-              <input type='hidden' name='directionId' value={dir.id} />
-              <button
-                type='submit'
-                name='intent'
-                value='disconnect'
-                className='text-red-500'
-              >
-                отвязать
-              </button>
-            </Form>
+            {user?.staff && (
+              <Form method='post'>
+                <input type='hidden' name='directionId' value={dir.id} />
+                <button
+                  type='submit'
+                  name='intent'
+                  value='disconnect'
+                  className='text-red-500'
+                >
+                  отвязать
+                </button>
+              </Form>
+            )}
           </div>
         ))}
       </div>

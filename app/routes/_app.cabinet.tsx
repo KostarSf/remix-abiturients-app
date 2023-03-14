@@ -43,24 +43,32 @@ export default function Cabinet() {
               </p>
             )}
           </div>
-          <details className='group relative flex h-full flex-col'>
-            <summary tabIndex={0} className='_no-triangle flex cursor-pointer'>
-              <div className='flex h-12 flex-col justify-center leading-5'>
-                <p className='font-semibold'>{user.name}</p>
-                <p className='text-gray-500'>{user.email}</p>
+          <details className='group relative flex h-full flex-col flex-grow'>
+            <summary
+              tabIndex={0}
+              className='_no-triangle flex cursor-pointer flex-grow'
+            >
+              <div className='flex h-12 items-center leading-5 flex-grow'>
+                <div className='flex-grow'>
+                  <p className='font-semibold'>{user.name}</p>
+                  <p className='text-gray-500'>{user.email}</p>
+                </div>
+                <svg className='h-4 w-4 leading-none opacity-30'>
+                  <use href={`${icons}#caret-down`}></use>
+                </svg>
               </div>
             </summary>
-            <div className='mt-2 flex flex-col'>
-              <Link
+            <div className='mt-2 flex flex-col items-stretch'>
+              {/* <Link
                 to={`settings`}
                 className='py-1 text-gray-400 hover:text-mygreen'
               >
                 Настройки
-              </Link>
+              </Link> */}
               <Form action='/logout' method='post'>
                 <button
                   type='submit'
-                  className='py-1 text-gray-400 transition-colors hover:text-mygreen'
+                  className='block py-1 text-gray-400 transition-colors hover:text-mygreen'
                 >
                   Выйти
                 </button>

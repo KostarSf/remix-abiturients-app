@@ -1,4 +1,4 @@
-import type { Direction, Institution, Tag } from "@prisma/client";
+import type { Direction, Institution, Tag, User } from "@prisma/client";
 import { prisma } from "~/db.server";
 
 export type { Direction } from "@prisma/client";
@@ -16,13 +16,41 @@ export function getDirection({ id }: Pick<Direction, "id">) {
   });
 }
 
-export function getDirectionsListItems() {
+export function getDirectionsListItems(searchQuery: string | null) {
+  const search = searchQuery
+    ? searchQuery.trim() === ""
+      ? null
+      : searchQuery.trim()
+    : null;
   return prisma.direction.findMany({
     select: {
       id: true,
       name: true,
       tags: { select: { id: true, name: true } },
     },
+    orderBy: {
+      name: "asc",
+    },
+    ...(search && {
+      where: {
+        OR: [
+          {
+            name: {
+              contains: search,
+            },
+          },
+          {
+            tags: {
+              some: {
+                name: {
+                  contains: search,
+                },
+              },
+            },
+          },
+        ],
+      },
+    }),
   });
 }
 

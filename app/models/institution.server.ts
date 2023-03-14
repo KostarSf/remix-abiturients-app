@@ -18,13 +18,37 @@ export function getInstitution({ id }: Pick<Institution, "id">) {
   });
 }
 
-export function getInstitutionsListItems() {
+export function getInstitutionsListItems(searchQuery: string | null) {
+  const search = searchQuery
+    ? searchQuery.trim() === ""
+      ? null
+      : searchQuery.trim()
+    : null;
   return prisma.institution.findMany({
     select: {
       id: true,
       name: true,
       city: true,
     },
+    orderBy: {
+      name: "asc",
+    },
+    ...(search && {
+      where: {
+        OR: [
+          {
+            city: {
+              contains: search,
+            },
+          },
+          {
+            name: {
+              contains: search,
+            },
+          },
+        ],
+      },
+    }),
   });
 }
 
