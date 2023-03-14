@@ -6,7 +6,21 @@ import { prisma } from "~/db.server";
 export type { User } from "@prisma/client";
 
 export async function getUserById(id: User["id"]) {
-  return prisma.user.findUnique({ where: { id } });
+  return prisma.user.findUnique({
+    where: { id },
+  });
+}
+
+export function getFavDirections(id: User["id"]) {
+  return prisma.direction.findMany({
+    where: {
+      inFavs: {
+        some: {
+          id,
+        },
+      },
+    },
+  });
 }
 
 export async function getUserByEmail(email: User["email"]) {

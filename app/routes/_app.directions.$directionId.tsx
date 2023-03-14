@@ -100,7 +100,7 @@ export default function DirectionDetailsPage() {
           </Link>
         ))}
       </div>
-      <p className='py-6'>{data.direction.description}</p>
+      <p className='py-6 whitespace-pre-wrap'>{data.direction.description}</p>
       <h4 className='mt-6 mb-2 text-lg font-semibold'>
         Связанные учебные заведения
       </h4>

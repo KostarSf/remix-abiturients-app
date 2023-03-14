@@ -1,6 +1,7 @@
 import type { MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Link, NavLink, Outlet, useLoaderData } from "@remix-run/react";
+import { Form, Link, NavLink, useLoaderData } from "@remix-run/react";
+import ListDetailsOutlet from "~/components/ListDetailsOutlet";
 import { getTagsListItems } from "~/models/tag.server";
 import { useOptionalUser } from "~/utils";
 
@@ -20,42 +21,50 @@ export default function Tags() {
   const user = useOptionalUser();
 
   return (
-    <div className='flex justify-center gap-8'>
-      <div className='flex w-52 flex-col items-stretch'>
+    <ListDetailsOutlet>
+      <div className='mb-2'>
         {user?.staff ? (
-          <div className='mb-10'>
-            <Link to={`new`} className='border p-1'>
+          <div className='mb-2'>
+            <Link
+              to={`new`}
+              className='block py-2 rounded bg-myorange text-center font-semibold hover:bg-mygreen transition-colors'
+            >
               + Добавить категорию
             </Link>
           </div>
         ) : null}
-        {data.tagListItems.length === 0 ? (
-          <>
-            <p className='text-lg'>Скоро здесь появятся категории!</p>
-          </>
-        ) : (
-          <div className='flex flex-col items-stretch gap-4'>
-            {data.tagListItems.map((tag) => (
-              <NavLink
-                to={`/tags/${tag.id}`}
-                key={tag.id}
-                className={({ isActive }) =>
-                  `${
-                    isActive
-                      ? "bg-myorange font-semibold text-black"
-                      : "text-gray-500"
-                  } block rounded border-b-2 border-transparent py-1 px-2  transition-colors hover:text-black`
-                }
-              >
-                {tag.name}
-              </NavLink>
-            ))}
-          </div>
-        )}
+        <Form method='get' className='my-2'>
+          <input
+            type='search'
+            name='search'
+            placeholder='Поиск...'
+            className='w-full bg-gray-200 p-2'
+          />
+        </Form>
       </div>
-      <div className='flex-grow'>
-        <Outlet />
-      </div>
-    </div>
+      {data.tagListItems.length === 0 ? (
+        <>
+          <p className='text-lg'>Ничего не найдено!</p>
+        </>
+      ) : (
+        <div className='flex flex-col items-stretch gap-4'>
+          {data.tagListItems.map((tag) => (
+            <NavLink
+              to={`/tags/${tag.id}`}
+              key={tag.id}
+              className={({ isActive }) =>
+                `${
+                  isActive
+                    ? "bg-myorange font-semibold text-black"
+                    : "text-gray-500"
+                } block rounded border-b-2 border-transparent py-1 px-2  transition-colors hover:text-black`
+              }
+            >
+              {tag.name}
+            </NavLink>
+          ))}
+        </div>
+      )}
+    </ListDetailsOutlet>
   );
 }
