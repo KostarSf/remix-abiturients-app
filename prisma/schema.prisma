@@ -24,11 +24,14 @@ model User {
 
   password Password?
   messages Message[]
+  chatMessages ChatMessage[]
 
   favInstitutions Institution[]
   favDirections   Direction[]
 
   trackedEvents Event[]
+
+  chat Chat?
 }
 
 model Password {
@@ -68,7 +71,6 @@ model Direction {
 
   institutions Institution[]
   tags         Tag[]
-  messages     Message[]
 
   inFavs User[]
 
@@ -102,10 +104,8 @@ model Message {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId String
 
-  direction   Direction? @relation(fields: [directionId], references: [id])
-  directionId String?
-  event       Event?     @relation(fields: [eventId], references: [id])
-  eventId     String?
+  event   Event?  @relation(fields: [eventId], references: [id])
+  eventId String?
 
   media Media[]
 
@@ -120,4 +120,27 @@ model Media {
 
   comment   Message @relation(fields: [commentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   commentId String
+}
+
+model Chat {
+  id String @id @default(cuid())
+
+  owner    User          @relation(fields: [ownerId], references: [id])
+  ownerId  String        @unique
+  messages ChatMessage[]
+
+  createdAt DateTime @default(now())
+}
+
+model ChatMessage {
+  id String @id @default(cuid())
+
+  text   String
+  chat   Chat   @relation(fields: [chatId], references: [id])
+  chatId String
+
+  owner   User @relation(fields: [ownerId], references: [id])
+  ownerId String
+
+  createdAt DateTime @default(now())
 }

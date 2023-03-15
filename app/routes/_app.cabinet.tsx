@@ -28,7 +28,7 @@ export default function Cabinet() {
       <div className='flex-grow overflow-auto'>
         <Outlet />
       </div>
-      <div className='flex w-72 flex-col items-stretch rounded-lg bg-gray-100 p-4'>
+      <div className='flex w-72 flex-col items-stretch flex-shrink-0 rounded-lg bg-gray-100 p-4'>
         <div className='flex gap-4'>
           <div className='flex h-12 w-12 select-none items-center justify-center overflow-hidden rounded-full border-2 border-mygreen bg-gray-200'>
             {user.avatarUrl ? (
