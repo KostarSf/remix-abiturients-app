@@ -68,7 +68,8 @@ export default function Directions() {
               >
                 <div className='flex gap-2'>
                   <p className='flex-grow'>{direction.name}</p>
-                  {data.favDirections?.findIndex(
+                  {data.favDirections &&
+                  data.favDirections?.findIndex(
                     (d) => d.id === direction.id
                   ) !== -1 ? (
                     <svg className='h-4 w-4 leading-none text-red-600 flex-shrink-0'>

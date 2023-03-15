@@ -102,3 +102,22 @@ export function addTagToEvent({
     },
   });
 }
+
+
+
+export function getEventsWithTag(tagId: Tag["id"]) {
+  return prisma.event.findMany({
+    where: {
+      tags: {
+        some: {
+          id: tagId,
+        },
+      },
+    },
+    select: {
+      id: true,
+      name: true,
+      description: true,
+    },
+  });
+}

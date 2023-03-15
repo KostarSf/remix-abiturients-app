@@ -4,6 +4,7 @@ import { json } from "@remix-run/node";
 import { Form, Link, useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
 import { getDirectionsWithTag } from "~/models/direction.server";
+import { getEventsWithTag } from "~/models/event.server";
 import { deleteTag, getTag, removeDirectionFromTag } from "~/models/tag.server";
 import { requireUser } from "~/session.server";
 import { useOptionalUser } from "~/utils";
@@ -45,8 +46,9 @@ export async function loader({ params, request }: LoaderArgs) {
   }
 
   const directions = await getDirectionsWithTag(params.tagId);
+  const events = await getEventsWithTag(params.tagId);
 
-  return json({ tag, directions });
+  return json({ tag, directions, events });
 }
 
 export default function DirectionDetailsPage() {
@@ -66,17 +68,42 @@ export default function DirectionDetailsPage() {
             >
               {dir.name}
             </Link>
-            <Form method='post'>
-              <input type='hidden' name='directionId' value={dir.id} />
-              <button
-                type='submit'
-                name='intent'
-                value='disconnect'
-                className='text-red-500'
-              >
-                отвязать
-              </button>
-            </Form>
+            {user?.staff && (
+              <Form method='post'>
+                <input type='hidden' name='directionId' value={dir.id} />
+                <button
+                  type='submit'
+                  name='intent'
+                  value='disconnect'
+                  className='text-red-500'
+                >
+                  отвязать
+                </button>
+              </Form>
+            )}
+          </div>
+        ))}
+      </div>
+      <p className='mb-2 font-semibold mt-5'>Связанные мероприятия</p>
+      <div className='flex flex-col'>
+        {data.events.map((evt) => (
+          <div key={evt.id} className='flex gap-2'>
+            <Link to={`/events/${evt.id}`} className='text-blue-600 underline'>
+              {evt.name}
+            </Link>
+            {user?.staff && (
+              <Form method='post'>
+                <input type='hidden' name='directionId' value={evt.id} />
+                <button
+                  type='submit'
+                  name='intent'
+                  value='disconnect'
+                  className='text-red-500'
+                >
+                  отвязать
+                </button>
+              </Form>
+            )}
           </div>
         ))}
       </div>
