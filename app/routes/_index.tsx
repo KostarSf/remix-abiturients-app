@@ -1,5 +1,10 @@
+import { redirect } from "@remix-run/node";
 import { Form, Link } from "@remix-run/react";
 import { useOptionalUser } from "~/utils";
+
+export const loader = () => {
+  return redirect("/directions");
+};
 
 export default function Index() {
   const user = useOptionalUser();

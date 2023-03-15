@@ -15,7 +15,7 @@ export default function CabDirections() {
   const data = useLoaderData<typeof loader>();
 
   return (
-    <div>
+    <div className='py-2 px-4'>
       <h1 className='text-xl font-semibold'>Избранные направления</h1>
       <hr className='mb-4' />
       <div className='flex flex-col gap-2'>
