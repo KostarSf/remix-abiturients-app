@@ -84,7 +84,7 @@ model Event {
   name        String
   description String
   date        DateTime
-  public      Boolean  @default(false)
+  isPublic    Boolean  @default(false)
 
   institution   Institution? @relation(fields: [institutionId], references: [id])
   institutionId String?

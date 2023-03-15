@@ -19,8 +19,8 @@ export default function AppRoute() {
             <AppNavLink title='Мероприятия' url='/events' />
             <hr className='my-5' />
             <AppNavLink title='Кабинет' url='/cabinet' />
-            <AppNavLink title='Контакты' url='/contacts' />
-            <AppNavLink title='Отзывы' url='/feedback' />
+            {/* <AppNavLink title='Контакты' url='/contacts' />
+            <AppNavLink title='Отзывы' url='/feedback' /> */}
           </div>
         </div>
       </div>

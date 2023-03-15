@@ -77,7 +77,7 @@ export async function loader({ params, request }: LoaderArgs) {
   }
 
   const tags = await getTagsListItems();
-  const institutions = await getInstitutionsListItems();
+  const institutions = await getInstitutionsListItems(null);
 
   return json({ direction, favorite, tags, institutions });
 }

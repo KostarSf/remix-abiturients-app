@@ -1,4 +1,4 @@
-import type { Direction, Password, User } from "@prisma/client";
+import type { Direction, Event, Password, User } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
 import { prisma } from "~/db.server";
@@ -15,6 +15,18 @@ export function getFavDirections(id: User["id"]) {
   return prisma.direction.findMany({
     where: {
       inFavs: {
+        some: {
+          id,
+        },
+      },
+    },
+  });
+}
+
+export function getTrackedEvents(id: User["id"]) {
+  return prisma.event.findMany({
+    where: {
+      inTracks: {
         some: {
           id,
         },
@@ -114,6 +126,45 @@ export async function toggleDirectionFav({
           : {
               connect: {
                 id: dirId,
+              },
+            }),
+      },
+    },
+  });
+}
+
+export async function toggleEventTrack({
+  id,
+  eventId,
+}: {
+  eventId: Event["id"];
+  id: User["id"];
+}) {
+  const hasEvent = await prisma.user.findFirst({
+    where: {
+      id,
+      trackedEvents: {
+        some: {
+          id: eventId,
+        },
+      },
+    },
+  });
+  return prisma.user.update({
+    where: {
+      id,
+    },
+    data: {
+      trackedEvents: {
+        ...(hasEvent
+          ? {
+              disconnect: {
+                id: eventId,
+              },
+            }
+          : {
+              connect: {
+                id: eventId,
               },
             }),
       },

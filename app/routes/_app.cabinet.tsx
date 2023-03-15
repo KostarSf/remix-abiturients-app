@@ -4,7 +4,7 @@ import { Form, Link, NavLink, Outlet, useLoaderData } from "@remix-run/react";
 import { requireUserId } from "~/session.server";
 import { useUser } from "~/utils";
 import icons from "~/icons.svg";
-import { getUserFavDirections } from "~/models/user.server";
+import { getTrackedEvents, getUserFavDirections } from "~/models/user.server";
 
 export const meta: MetaFunction = () => {
   return {
@@ -15,8 +15,12 @@ export const meta: MetaFunction = () => {
 export async function loader({ request }: LoaderArgs) {
   const userId = await requireUserId(request);
   const userFavDirections = await getUserFavDirections(userId);
+  const userTrackedEvents = await getTrackedEvents(userId);
 
-  return json({ userFavDirectionsCount: userFavDirections.length });
+  return json({
+    userFavDirectionsCount: userFavDirections.length,
+    userTrackedEventsCount: userTrackedEvents.length,
+  });
 }
 
 export default function Cabinet() {
@@ -91,8 +95,16 @@ export default function Cabinet() {
                     : data.userFavDirectionsCount
                 }
               />
-              <CabinetLink title='Мероприятия' url='events' />
-              <CabinetLink title='Категории' url='tags' />
+              <CabinetLink
+                title='Мероприятия'
+                url='events'
+                value={
+                  data.userTrackedEventsCount === 0
+                    ? undefined
+                    : data.userTrackedEventsCount
+                }
+              />
+              {/* <CabinetLink title='Категории' url='tags' /> */}
             </div>
           </div>
         ) : null}
