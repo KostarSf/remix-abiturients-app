@@ -65,6 +65,7 @@ export default function Cabinet() {
               >
                 Настройки
               </Link> */}
+
               <Form action='/logout' method='post'>
                 <button
                   type='submit'
